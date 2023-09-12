@@ -1,0 +1,14 @@
+[remap]
+
+importer="qodot.map"
+type="Resource"
+uid="uid://b6uysbosh8gsx"
+path="res://.godot/imported/plaza_map1.15.1.map-d3d3b38146ba8bcb939518e8a7f5edfb.tres"
+
+[deps]
+
+source_file="res://maps/autosave/autosave/plaza_map1.15.1.map"
+dest_files=["res://.godot/imported/plaza_map1.15.1.map-d3d3b38146ba8bcb939518e8a7f5edfb.tres"]
+
+[params]
+

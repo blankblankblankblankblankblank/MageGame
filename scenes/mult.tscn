@@ -1,0 +1,54 @@
+[gd_scene load_steps=2 format=3 uid="uid://ds374ie4yjg0i"]
+
+[ext_resource type="Script" path="res://scripts/Multiplayer.gd" id="1_mo28i"]
+
+[node name="Mult" type="Node"]
+script = ExtResource("1_mo28i")
+
+[node name="Level" type="Node" parent="."]
+
+[node name="LevelSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://scenes/level1.tscn")
+spawn_path = NodePath("../Level")
+spawn_limit = 1
+
+[node name="UI" type="Control" parent="."]
+process_mode = 2
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="UI"]
+layout_mode = 0
+offset_right = 121.0
+offset_bottom = 31.0
+text = "conexão direta:"
+
+[node name="host" type="Button" parent="UI"]
+layout_mode = 0
+offset_left = 121.0
+offset_right = 196.0
+offset_bottom = 31.0
+text = "host"
+
+[node name="connect" type="Button" parent="UI"]
+layout_mode = 0
+offset_left = 196.0
+offset_right = 273.0
+offset_bottom = 31.0
+text = "join"
+
+[node name="LineEdit" type="LineEdit" parent="UI"]
+layout_mode = 0
+offset_left = 273.0
+offset_right = 397.0
+offset_bottom = 31.0
+placeholder_text = "address"
+
+[connection signal="pressed" from="UI/host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="UI/connect" to="." method="_on_connect_pressed"]

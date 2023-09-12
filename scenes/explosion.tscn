@@ -1,0 +1,166 @@
+[gd_scene load_steps=19 format=3 uid="uid://dyafi3js2p3rf"]
+
+[ext_resource type="Script" path="res://scripts/explosion.gd" id="1_gy3et"]
+[ext_resource type="Material" uid="uid://buejqettv4s01" path="res://materials/explosion_mat2.tres" id="2_37iqp"]
+[ext_resource type="Material" uid="uid://d1sm6fd2jib5r" path="res://materials/explosion_mat1.tres" id="3_cc8ap"]
+[ext_resource type="Texture2D" uid="uid://dn4aomuggtwwi" path="res://addons/kenney_prototype_textures/light/texture_03.png" id="4_sln58"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_01i7x"]
+radius = 3.142
+
+[sub_resource type="SphereMesh" id="SphereMesh_smlix"]
+material = ExtResource("2_37iqp")
+radius = 4.0
+height = 8.0
+radial_segments = 16
+rings = 8
+
+[sub_resource type="SphereMesh" id="SphereMesh_82sxv"]
+material = ExtResource("3_cc8ap")
+radius = 3.142
+height = 6.283
+radial_segments = 16
+rings = 8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5dhho"]
+transparency = 4
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("4_sln58")
+albedo_texture_force_srgb = true
+
+[sub_resource type="Gradient" id="Gradient_alkce"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0.75, 1)
+colors = PackedColorArray(1, 0.772549, 0, 1, 1, 1, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_wfknq"]
+gradient = SubResource("Gradient_alkce")
+
+[sub_resource type="Curve" id="Curve_jh2vn"]
+_data = [Vector2(0, 1), 0.0, 0.103581, 0, 0, Vector2(1, 0), -8.05977, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_vil6w"]
+curve = SubResource("Curve_jh2vn")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_uw4ny"]
+particle_flag_align_y = true
+direction = Vector3(0, 1, 0)
+spread = 75.0
+initial_velocity_min = 16.0
+initial_velocity_max = 24.0
+scale_curve = SubResource("CurveTexture_vil6w")
+color_ramp = SubResource("GradientTexture1D_wfknq")
+
+[sub_resource type="Curve" id="Curve_8f5di"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.352713, 1), 0.0, 0.0, 0, 0, Vector2(0.647287, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="TubeTrailMesh" id="TubeTrailMesh_pansb"]
+lightmap_size_hint = Vector2i(9, 9)
+radius = 0.015
+sections = 2
+section_length = 0.5
+cap_top = false
+cap_bottom = false
+curve = SubResource("Curve_8f5di")
+
+[sub_resource type="Animation" id="Animation_87ub5"]
+resource_name = "explosion"
+length = 0.7
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(6, 6, 6)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MeshInstance3D2:scale")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.22, 0.3, 0.37, 0.4, 0.45, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(1, 1, 1), Vector3(1, 1, 1), Vector3(1, 1, 1), Vector3(1, 1, 1), Vector3(1.2, 1.2, 1.2), Vector3(1, 1, 1), Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("OmniLight3D:light_energy")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.25, 1.25, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_csuno"]
+_data = {
+"explosion": SubResource("Animation_87ub5")
+}
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_1qrq5"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/sync = false
+properties/0/watch = false
+
+[node name="Area3D" type="Area3D"]
+collision_mask = 3
+script = ExtResource("1_gy3et")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_01i7x")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+mesh = SubResource("SphereMesh_smlix")
+surface_material_override/0 = ExtResource("2_37iqp")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+mesh = SubResource("SphereMesh_82sxv")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_color = Color(1, 0.615686, 0, 1)
+light_energy = 1.25
+omni_range = 12.0
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+material_override = SubResource("StandardMaterial3D_5dhho")
+emitting = false
+amount = 25
+lifetime = 1.25
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_uw4ny")
+draw_pass_1 = SubResource("TubeTrailMesh_pansb")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 1.5
+autostart = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_csuno")
+}
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_1qrq5")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

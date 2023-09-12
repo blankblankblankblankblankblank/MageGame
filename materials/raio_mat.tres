@@ -1,0 +1,23 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://b83336ql3pu4v"]
+
+[ext_resource type="Texture2D" uid="uid://bcq5a876uayx1" path="res://Textures/trovão.png" id="1_rdinj"]
+
+[resource]
+transparency = 1
+shading_mode = 0
+specular_mode = 1
+albedo_color = Color(4, 4, 4, 1)
+albedo_texture = ExtResource("1_rdinj")
+heightmap_scale = 5.588
+heightmap_deep_parallax = true
+heightmap_min_layers = 8
+heightmap_max_layers = 32
+uv1_scale = Vector3(10, 10, 10)
+uv1_offset = Vector3(-0.17, 0, -0.245)
+uv1_triplanar = true
+uv1_world_triplanar = true
+uv2_world_triplanar = true
+texture_filter = 2
+disable_receive_shadows = true
+grow_amount = -0.029
+proximity_fade_distance = 12.0

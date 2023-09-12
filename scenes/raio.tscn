@@ -1,0 +1,73 @@
+[gd_scene load_steps=9 format=3 uid="uid://btbxcy7o57dq6"]
+
+[ext_resource type="Script" path="res://scripts/raio.gd" id="1_frqm3"]
+[ext_resource type="Texture2D" uid="uid://dj7gpvb5m3hh5" path="res://Textures/trovão.png" id="2_pg3vm"]
+[ext_resource type="Material" uid="uid://b83336ql3pu4v" path="res://materials/raio_mat.tres" id="3_ijcrx"]
+
+[sub_resource type="Curve" id="Curve_j7unc"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.892361, 0.430605), -1.69333, -1.69333, 0, 0, Vector2(1, 0), -8.59348, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q8nte"]
+transparency = 4
+cull_mode = 2
+shading_mode = 0
+specular_mode = 1
+albedo_color = Color(4, 4, 4, 1)
+albedo_texture = ExtResource("2_pg3vm")
+heightmap_scale = 5.588
+heightmap_deep_parallax = true
+heightmap_min_layers = 8
+heightmap_max_layers = 32
+uv1_scale = Vector3(5.924, 5.924, 5.924)
+uv1_triplanar = true
+uv1_world_triplanar = true
+uv2_world_triplanar = true
+texture_filter = 2
+disable_receive_shadows = true
+grow_amount = -0.029
+proximity_fade_distance = 12.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_v2rs5"]
+material = SubResource("StandardMaterial3D_q8nte")
+flip_faces = true
+radial_segments = 10
+rings = 5
+
+[sub_resource type="TubeTrailMesh" id="TubeTrailMesh_k8vem"]
+material = ExtResource("3_ijcrx")
+radius = 0.05
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_my6oe"]
+properties/0/path = NodePath(".:rotation")
+properties/0/spawn = true
+properties/0/sync = true
+properties/0/watch = false
+properties/1/path = NodePath(".:position")
+properties/1/spawn = true
+properties/1/sync = true
+properties/1/watch = false
+
+[node name="raio" type="RayCast3D"]
+target_position = Vector3(0, 0, -500)
+debug_shape_thickness = 3
+script = ExtResource("1_frqm3")
+interpolation = SubResource("Curve_j7unc")
+
+[node name="modelo2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.3, 0, 0, 0, -1.31134e-08, -0.3, 0, 0.3, -1.31134e-08, 0, 9.09495e-13, 0)
+mesh = SubResource("SphereMesh_v2rs5")
+
+[node name="modelo" type="MeshInstance3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, -2.18557e-05, -2, 0, 500, -8.74228e-08, 0, 0, -250)
+mesh = SubResource("TubeTrailMesh_k8vem")
+
+[node name="Timer" type="Timer" parent="."]
+process_callback = 0
+wait_time = 0.278
+autostart = true
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_my6oe")
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

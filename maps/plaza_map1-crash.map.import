@@ -1,0 +1,14 @@
+[remap]
+
+importer="qodot.map"
+type="Resource"
+uid="uid://dsvovsfjnpdqq"
+path="res://.godot/imported/plaza_map1-crash.map-b1401418fbf330806331b8bd31fe7b3d.tres"
+
+[deps]
+
+source_file="res://maps/plaza_map1-crash.map"
+dest_files=["res://.godot/imported/plaza_map1-crash.map-b1401418fbf330806331b8bd31fe7b3d.tres"]
+
+[params]
+

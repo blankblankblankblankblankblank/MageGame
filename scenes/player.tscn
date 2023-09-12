@@ -1,0 +1,231 @@
+[gd_scene load_steps=12 format=3 uid="uid://cwi54n2u0m1av"]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_6ffwu"]
+[ext_resource type="Script" path="res://scripts/Input.gd" id="2_votk2"]
+[ext_resource type="Texture2D" uid="uid://bmoxyj4jvprsq" path="res://addons/kenney_prototype_textures/light/texture_12.png" id="3_odxr7"]
+[ext_resource type="FontVariation" uid="uid://bsiilyxk5xwsv" path="res://Textures/fonte.tres" id="4_mqetc"]
+[ext_resource type="Texture2D" uid="uid://bsta733gke64t" path="res://Textures/hitmarker.png" id="4_xfj8n"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_a7lho"]
+properties/0/path = NodePath(".:player")
+properties/0/spawn = true
+properties/0/sync = false
+properties/0/watch = false
+properties/1/path = NodePath(".:position")
+properties/1/spawn = true
+properties/1/sync = false
+properties/1/watch = true
+properties/2/path = NodePath(".:velocity")
+properties/2/spawn = true
+properties/2/sync = false
+properties/2/watch = true
+properties/3/path = NodePath(".:hp")
+properties/3/spawn = true
+properties/3/sync = false
+properties/3/watch = true
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_g3kio"]
+properties/0/path = NodePath("PlayerInput:direction")
+properties/0/spawn = true
+properties/0/sync = true
+properties/0/watch = false
+properties/1/path = NodePath("PlayerInput:cam_rot")
+properties/1/spawn = true
+properties/1/sync = false
+properties/1/watch = true
+properties/2/path = NodePath("PlayerInput:rot")
+properties/2/spawn = true
+properties/2/sync = false
+properties/2/watch = true
+properties/3/path = NodePath("PlayerInput:arma")
+properties/3/spawn = true
+properties/3/sync = true
+properties/3/watch = false
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_kcntr"]
+radius = 0.4
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6r2j7"]
+radius = 0.42
+height = 2.05
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_d4i8b"]
+radius = 0.25
+height = 0.5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lcfsn"]
+bg_color = Color(0.831373, 0, 0, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[node name="Player" type="CharacterBody3D" groups=["player"]]
+collision_layer = 3
+floor_constant_speed = true
+floor_block_on_wall = false
+floor_snap_length = 0.33
+script = ExtResource("1_6ffwu")
+
+[node name="ServerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_a7lho")
+
+[node name="PlayerInput" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_g3kio")
+script = ExtResource("2_votk2")
+
+[node name="0" type="Timer" parent="PlayerInput"]
+wait_time = 0.2
+one_shot = true
+
+[node name="1" type="Timer" parent="PlayerInput"]
+wait_time = 0.55
+one_shot = true
+
+[node name="2" type="Timer" parent="PlayerInput"]
+wait_time = 0.7
+one_shot = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_kcntr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_6r2j7")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -0.29)
+fov = 90.0
+
+[node name="TextureRect" type="TextureRect" parent="Camera3D"]
+modulate = Color(1, 0, 0, 1)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1.0
+offset_top = -1.0
+offset_right = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(1, 1)
+size_flags_horizontal = 4
+texture = ExtResource("3_odxr7")
+expand_mode = 1
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Camera3D"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_d4i8b")
+skeleton = NodePath("../../MeshInstance3D")
+
+[node name="RayCast3D" type="RayCast3D" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.3)
+target_position = Vector3(0, 0, -600)
+debug_shape_thickness = 1
+
+[node name="Marker3D" type="Marker3D" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.36, -0.7)
+
+[node name="Marker3D2" type="Marker3D" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, -0.94)
+
+[node name="HitMark" type="TextureRect" parent="Camera3D"]
+visible = false
+texture_filter = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -7.99994
+offset_top = -7.99997
+offset_right = 56.0001
+offset_bottom = 56.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("4_xfj8n")
+
+[node name="HitTimer" type="Timer" parent="Camera3D"]
+wait_time = 0.15
+one_shot = true
+
+[node name="Control" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="Control"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -122.0
+offset_top = -28.0
+offset_right = 123.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/fill = SubResource("StyleBoxFlat_lcfsn")
+max_value = 200.0
+step = 1.0
+value = 200.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="Control/ProgressBar"]
+layout_mode = 0
+offset_right = 245.0
+offset_bottom = 26.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("4_mqetc")
+text = "200"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="speed" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.393663
+anchor_right = 0.606337
+anchor_bottom = 0.0817901
+grow_horizontal = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Control" type="Control" parent="Control"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Control/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.235294)
+
+[node name="Button" type="Button" parent="Control/Control"]
+layout_mode = 0
+offset_left = 1029.0
+offset_top = 36.0
+offset_right = 1134.0
+offset_bottom = 73.0
+text = "quit server"
+
+[connection signal="synchronized" from="ServerSynchronizer" to="." method="_on_server_synchronizer_synchronized"]
+[connection signal="timeout" from="Camera3D/HitTimer" to="." method="_on_hit_timer_timeout"]
